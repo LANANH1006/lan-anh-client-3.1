@@ -24,21 +24,25 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-          cache: gradle
 
-      - name: Setup Gradle
+      - name: Setup Gradle 8.12
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.12'
 
-      - name: Build Fabric mod
+      - name: Check source files
+        run: |
+          test -f build.gradle
+          test -f settings.gradle
+          test -f gradle.properties
+
+      - name: Build mod
         run: gradle build --no-daemon
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
-          name: LanAnhClient-1.21.4
+          name: LanAnhClient-jar
           path: build/libs/*.jar
           if-no-files-found: error
           retention-days: 14
-          
